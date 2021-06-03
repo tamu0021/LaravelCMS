@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Front;
 
 use App\Models\Post;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 class PostController extends Controller
 {
@@ -15,10 +16,7 @@ class PostController extends Controller
     public function index()
     {
         // 公開→新しい順に表示
-        $posts = Post::where('is_public', true)
-            ->orderBy('published_at', 'desc')
-            ->paginate(10);
-
+        $posts = Post::publicList();
         return view('front.posts.index', compact('posts'));
     }
 
@@ -51,7 +49,7 @@ class PostController extends Controller
      */
     public function show(Post $post)
     {
-        $post = Post::where('is_public', true)->findOrFail($id);
+        $post = Post::publicFindById($id);
 
         return view('front.posts.show', compact('post'));
     }
